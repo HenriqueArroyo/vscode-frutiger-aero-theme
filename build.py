@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build do Frutiger Aero Glass.
 
-    python3 build.py            # gera temas, SVG, CSS e relatório de contraste
+    python3 build.py            # gera temas, ícones, SVG, CSS e relatório de contraste
     python3 build.py --vsix     # idem + empacota dist/<nome>-<versão>.vsix
 
 Não depende de Node: o .vsix é montado direto com zipfile.
@@ -17,6 +17,7 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / "src"))
 
 from background import build_svg  # noqa: E402
+from icons import icon_theme, render_icons  # noqa: E402
 from palettes import VARIANTS  # noqa: E402
 from tokens import semantic_token_colors, token_colors  # noqa: E402
 from workbench import workbench_colors  # noqa: E402
@@ -24,6 +25,8 @@ from workbench import workbench_colors  # noqa: E402
 THEMES_DIR = ROOT / "themes"
 DIST_DIR = ROOT / "dist"
 ASSETS_DIR = ROOT / "assets"
+ICONS_DIR = ROOT / "icons"
+ICON_THEME = "aeroglass-icon-theme.json"
 
 SEL_ALL = '.monaco-workbench:is([class*="aeroglass-dark"],[class*="aeroglass-light"])'
 SEL_DARK = '.monaco-workbench[class*="aeroglass-dark"]'
@@ -93,6 +96,21 @@ def build_themes() -> int:
     return failures
 
 
+# -------------------------------------------------------------------- ícones --
+def build_icons() -> None:
+    ICONS_DIR.mkdir(exist_ok=True)
+    for old in ICONS_DIR.glob("*.svg"):  # remove ícones que saíram do catálogo
+        old.unlink()
+    icons = render_icons()
+    for name, svg in icons.items():
+        (ICONS_DIR / name).write_text(svg)
+    theme = icon_theme()
+    (THEMES_DIR / ICON_THEME).write_text(json.dumps(theme, indent=2, ensure_ascii=False) + "\n")
+    print(f"  ícones -> icons/ ({len(icons)} SVGs), themes/{ICON_THEME} "
+          f"({len(theme['fileExtensions'])} extensões, {len(theme['fileNames'])} nomes, "
+          f"{len(theme['folderNames'])} pastas)")
+
+
 # ----------------------------------------------------------------- glass/css --
 def build_glass() -> None:
     ASSETS_DIR.mkdir(exist_ok=True)
@@ -119,6 +137,7 @@ CONTENT_TYPES = """<?xml version="1.0" encoding="utf-8"?>
   <Default Extension=".vsixmanifest" ContentType="text/xml"/>
   <Default Extension=".md" ContentType="text/markdown"/>
   <Default Extension=".png" ContentType="image/png"/>
+  <Default Extension=".svg" ContentType="image/svg+xml"/>
 </Types>
 """
 
@@ -159,6 +178,7 @@ def build_vsix() -> Path:
     pkg = json.loads((ROOT / "package.json").read_text())
     files = ["package.json", "README.md", "CHANGELOG.md"]
     files += [str(p.relative_to(ROOT)) for p in sorted(THEMES_DIR.glob("*.json"))]
+    files += [str(p.relative_to(ROOT)) for p in sorted(ICONS_DIR.glob("*.svg"))]
     icon = pkg.get("icon")
     if icon:
         files.append(icon)
@@ -184,6 +204,7 @@ def build_vsix() -> Path:
 def main() -> int:
     print("Frutiger Aero Glass: build")
     failures = build_themes()
+    build_icons()
     build_glass()
     if "--vsix" in sys.argv:
         build_vsix()

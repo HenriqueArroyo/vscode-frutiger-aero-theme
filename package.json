@@ -1,8 +1,8 @@
 {
   "name": "frutiger-aero-glass",
   "displayName": "Frutiger Aero Glass",
-  "description": "Tema Frutiger Aero (escuro e claro) com camada opcional de vidro translúcido, brilho e céu de fundo.",
-  "version": "0.1.0",
+  "description": "Tema Frutiger Aero (escuro e claro) com ícones de arquivo com brilho e camada opcional de vidro translúcido.",
+  "version": "0.2.0",
   "publisher": "local",
   "private": true,
   "icon": "icon.png",
@@ -30,6 +30,13 @@
         "label": "Frutiger Aero Glass Light",
         "uiTheme": "vs",
         "path": "./themes/aeroglass-light-color-theme.json"
+      }
+    ],
+    "iconThemes": [
+      {
+        "id": "aeroglass-icons",
+        "label": "Frutiger Aero Glass Icons",
+        "path": "./themes/aeroglass-icon-theme.json"
       }
     ]
   }

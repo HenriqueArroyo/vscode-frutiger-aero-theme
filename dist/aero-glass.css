@@ -104,6 +104,11 @@
 .monaco-workbench:is([class*="aeroglass-dark"],[class*="aeroglass-light"]) .part.editor > .content {
   background-color: var(--aero-glass-editor) !important;
   backdrop-filter: blur(var(--aero-blur)) saturate(130%);
+  /* O backdrop-filter prende os widgets do editor (sugestões, hover) neste
+     contexto; z-index 1 os mantém acima do painel e da lateral. Menus e
+     quick input ficam fora daqui, com z-index bem maior. */
+  position: relative;
+  z-index: 1;
 }
 
 .monaco-workbench:is([class*="aeroglass-dark"],[class*="aeroglass-light"]) .part.sidebar,
@@ -125,7 +130,9 @@
 .monaco-workbench:is([class*="aeroglass-dark"],[class*="aeroglass-light"]) .part.titlebar {
   background-color: var(--aero-glass-title) !important;
   background-image: var(--aero-gloss) !important;
-  backdrop-filter: blur(10px) saturate(150%);
+  /* Sem backdrop-filter/filter/transform aqui: eles criam um contexto de
+     empilhamento que prende os menus File…Help (position: fixed) dentro da
+     barra, e a barra lateral passa a ser desenhada por cima deles. */
   box-shadow: inset 0 -1px 0 var(--aero-edge-strong), 0 1px 4px rgba(0, 30, 60, .25);
   text-shadow: var(--aero-text-shadow);
 }
