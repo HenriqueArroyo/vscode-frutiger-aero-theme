@@ -104,3 +104,4 @@ O build confere o contraste WCAG (mínimo de 4.5:1 para texto) de todas as cores
 
 Para testar sem reinstalar, abra a pasta no VS Code e pressione `F5` (Extension Development Host).
 # vscode-frutiger-aero-theme
+# vscode-frutiger-aero-theme
