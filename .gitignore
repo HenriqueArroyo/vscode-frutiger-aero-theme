@@ -1,0 +1,4 @@
+*.vsix
+__pycache__/
+*.pyc
+.vscode-test/

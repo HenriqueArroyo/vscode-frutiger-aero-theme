@@ -1,0 +1,362 @@
+/* ==========================================================================
+   Frutiger Aero Glass: camada visual (CSS injetado)
+   --------------------------------------------------------------------------
+   ARQUIVO-FONTE. Não aponte o loader para cá: use dist/aero-glass.css, gerado
+   por `python3 build.py`, que troca os marcadores de seletor e insere o SVG.
+
+   Tudo fica restrito a .monaco-workbench com um tema "aeroglass" ativo:
+   trocar para outro tema desliga a camada sem precisar desinstalar nada.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   0. Variáveis (ajuste fino aqui)
+   -------------------------------------------------------------------------- */
+$A {
+  --aero-sky: url("__SKY__");
+  --aero-blur: 6px;            /* desfoque do vidro grande (editor, laterais) */
+  --aero-blur-widget: 16px;    /* desfoque de widgets flutuantes */
+  --aero-radius: 10px;
+  --aero-gloss: linear-gradient(180deg, rgba(255,255,255,.42) 0%, rgba(255,255,255,.14) 49%, rgba(255,255,255,0) 50%, rgba(255,255,255,.07) 100%);
+  --aero-gloss-soft: linear-gradient(180deg, rgba(255,255,255,.22) 0%, rgba(255,255,255,.06) 50%, rgba(255,255,255,0) 51%);
+  --aero-pill: linear-gradient(180deg, #9BE584 0%, #4DB64F 48%, #2E8540 52%, #3C9C46 100%);
+  --aero-button: linear-gradient(180deg, #78D0F7 0%, #2B9BDA 48%, #1580BF 52%, #1E92D2 100%);
+  --aero-activity: linear-gradient(180deg, rgba(52,196,176,.88) 0%, rgba(14,124,114,.9) 55%, rgba(8,92,84,.92) 100%);
+  --aero-activity-gloss: linear-gradient(90deg, rgba(255,255,255,.30) 0%, rgba(255,255,255,.10) 48%, rgba(255,255,255,0) 52%);
+  --aero-bubble: radial-gradient(circle at 35% 28%, rgba(255,255,255,.85) 0%, rgba(255,255,255,.25) 32%, rgba(120,230,255,.18) 60%, rgba(255,255,255,.35) 100%);
+  --aero-shadow: 0 12px 32px rgba(0,22,40,.38);
+  --aero-orb-blue: radial-gradient(circle at 50% 30%, #E6F8FF 0%, #6CC7F2 35%, #1678BC 75%, #0D4F85 100%);
+  --aero-orb-red: radial-gradient(circle at 50% 30%, #FFE3DE 0%, #FF8A73 35%, #D22E1E 75%, #8E140B 100%);
+}
+
+/* Escuro: vidro azul-lagoa sobre o céu */
+$DARK {
+  --aero-glass-editor: rgba(21, 66, 92, .74);
+  --aero-glass-side: rgba(17, 58, 82, .64);
+  --aero-glass-panel: rgba(18, 60, 85, .80);
+  --aero-glass-widget: rgba(26, 80, 110, .82);
+  --aero-glass-tabs: rgba(10, 40, 60, .35);
+  --aero-glass-title: rgba(40, 128, 182, .72);
+  --aero-tab-active: linear-gradient(180deg, rgba(150,215,245,.55) 0%, rgba(70,150,200,.45) 49%, rgba(42,111,148,.55) 50%, rgba(42,111,148,.35) 100%);
+  --aero-edge: rgba(255, 255, 255, .22);
+  --aero-edge-strong: rgba(160, 225, 255, .45);
+  --aero-text-shadow: 0 1px 2px rgba(0, 25, 45, .55);
+}
+
+/* Claro: vidro branco-gelo sobre o céu */
+$LIGHT {
+  --aero-glass-editor: rgba(246, 252, 255, .80);
+  --aero-glass-side: rgba(232, 246, 253, .68);
+  --aero-glass-panel: rgba(240, 249, 254, .84);
+  --aero-glass-widget: rgba(255, 255, 255, .84);
+  --aero-glass-tabs: rgba(255, 255, 255, .30);
+  --aero-glass-title: rgba(210, 238, 252, .72);
+  --aero-tab-active: linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(240,250,255,.92) 49%, rgba(222,242,252,.92) 50%, rgba(246,252,255,.95) 100%);
+  --aero-edge: rgba(255, 255, 255, .70);
+  --aero-edge-strong: rgba(21, 128, 191, .35);
+  --aero-text-shadow: 0 1px 0 rgba(255, 255, 255, .8);
+}
+
+/* --------------------------------------------------------------------------
+   1. Papel de parede
+   -------------------------------------------------------------------------- */
+$A {
+  background: var(--aero-sky) center / cover no-repeat !important;
+}
+
+/* --------------------------------------------------------------------------
+   2. Contêineres transparentes (o vidro fica só nas camadas escolhidas,
+      evitando somar transparências)
+   -------------------------------------------------------------------------- */
+$A .part:not(.statusbar),
+$A .part > .content,
+$A .part > .title,
+$A .composite.title,
+$A .split-view-view,
+$A .editor-group-container,
+$A .editor-group-container > .editor-container,
+$A .editor-instance,
+$A .monaco-editor,
+$A .monaco-editor .margin,
+$A .monaco-editor-background,
+$A .monaco-editor .inputarea.ime-input,
+$A .monaco-pane-view .pane-body,
+$A .monaco-list,
+$A .monaco-list-rows,
+$A .monaco-tl-contents,
+$A .breadcrumbs-control,
+$A .monaco-breadcrumbs,
+$A .tabs-and-actions-container,
+$A .editor-group-container > .title,
+$A .gettingStartedContainer,
+$A .welcomePageContainer,
+$A .settings-editor,
+$A .settings-editor > .settings-body,
+$A .extension-editor,
+$A .terminal-outer-container,
+$A .pane-composite-part > .title {
+  background-color: transparent !important;
+}
+
+/* --------------------------------------------------------------------------
+   3. Painéis de vidro
+   -------------------------------------------------------------------------- */
+$A .part.editor > .content {
+  background-color: var(--aero-glass-editor) !important;
+  backdrop-filter: blur(var(--aero-blur)) saturate(130%);
+}
+
+$A .part.sidebar,
+$A .part.auxiliarybar {
+  background-color: var(--aero-glass-side) !important;
+  backdrop-filter: blur(var(--aero-blur)) saturate(140%);
+  box-shadow: inset -1px 0 0 var(--aero-edge);
+}
+
+$A .part.panel {
+  background-color: var(--aero-glass-panel) !important;
+  backdrop-filter: blur(var(--aero-blur)) saturate(130%);
+  box-shadow: inset 0 1px 0 var(--aero-edge);
+}
+
+/* --------------------------------------------------------------------------
+   4. Barra de título + orbs da janela + command center
+   -------------------------------------------------------------------------- */
+$A .part.titlebar {
+  background-color: var(--aero-glass-title) !important;
+  background-image: var(--aero-gloss) !important;
+  backdrop-filter: blur(10px) saturate(150%);
+  box-shadow: inset 0 -1px 0 var(--aero-edge-strong), 0 1px 4px rgba(0, 30, 60, .25);
+  text-shadow: var(--aero-text-shadow);
+}
+
+$A .part.titlebar .window-controls-container .window-icon {
+  background-color: transparent !important;
+  background-image: var(--aero-orb-blue);
+  background-size: 20px 20px;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #FFFFFF !important;
+  text-shadow: 0 1px 1px rgba(0, 30, 60, .6);
+  transition: filter .15s ease;
+}
+$A .part.titlebar .window-controls-container .window-icon.window-close {
+  background-image: var(--aero-orb-red);
+}
+$A .part.titlebar .window-controls-container .window-icon:hover {
+  filter: brightness(1.18) drop-shadow(0 0 6px rgba(150, 230, 255, .9));
+}
+$A .part.titlebar .window-controls-container .window-icon.window-close:hover {
+  filter: brightness(1.15) drop-shadow(0 0 6px rgba(255, 140, 120, .9));
+}
+
+$A .part.titlebar .command-center .command-center-center {
+  border-radius: 999px !important;
+  background-image: var(--aero-gloss-soft);
+  box-shadow: inset 0 1px 2px rgba(0, 30, 60, .25), 0 1px 0 rgba(255, 255, 255, .35);
+}
+
+/* --------------------------------------------------------------------------
+   5. Barra de atividades: gradiente verde-água com brilho e ícones coloridos
+   -------------------------------------------------------------------------- */
+$A .part.activitybar {
+  background: var(--aero-activity-gloss), var(--aero-activity) !important;
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, .25);
+}
+
+$A .part.activitybar .action-item .action-label {
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 1px 1px rgba(0, 45, 40, .55));
+}
+
+/* bolha de vidro atrás do item ativo */
+$A .part.activitybar .action-item .active-item-indicator {
+  z-index: 0;
+}
+$A .part.activitybar .action-item.checked .active-item-indicator {
+  inset: 6px 7px !important;
+  border-radius: 14px;
+  background: var(--aero-bubble);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .55), 0 2px 6px rgba(0, 50, 45, .35);
+}
+$A .part.activitybar .action-item .active-item-indicator::before {
+  display: none !important;
+}
+$A .part.activitybar .action-item:hover .action-label {
+  filter: drop-shadow(0 0 5px rgba(220, 255, 250, .9));
+}
+
+/* cor por visão */
+$A .part.activitybar .action-label.codicon-explorer-view-icon { color: #D4FF9E !important; }
+$A .part.activitybar .action-label.codicon-search-view-icon { color: #A6ECFF !important; }
+$A .part.activitybar .action-label.codicon-source-control-view-icon { color: #FFD9A0 !important; }
+$A .part.activitybar .action-label.codicon-run-view-icon { color: #FFC4E6 !important; }
+$A .part.activitybar .action-label.codicon-extensions-view-icon { color: #FFF0A6 !important; }
+$A .part.activitybar .action-label.codicon-remote-explorer-view-icon { color: #C9E8FF !important; }
+$A .part.activitybar .action-label.codicon-testing-view-icon { color: #C9FFC2 !important; }
+
+/* --------------------------------------------------------------------------
+   6. Barra lateral: cabeçalhos de seção como pílulas verdes
+   -------------------------------------------------------------------------- */
+$A .part.sidebar > .title,
+$A .part.auxiliarybar > .title {
+  text-shadow: var(--aero-text-shadow);
+}
+
+$A .pane-header {
+  position: relative;
+  background-color: transparent !important;
+  color: #FFFFFF !important;
+  text-shadow: 0 1px 1px rgba(0, 50, 20, .6);
+}
+$A .pane-header::before {
+  content: "";
+  position: absolute;
+  inset: 2px 6px;
+  border-radius: 999px;
+  background: var(--aero-pill);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .6), inset 0 -1px 0 rgba(0, 60, 20, .35), 0 1px 3px rgba(0, 40, 20, .35);
+  pointer-events: none;
+}
+$A .pane-header > * {
+  position: relative;
+  z-index: 1;
+}
+$A .pane-header .codicon {
+  color: #FFFFFF !important;
+}
+
+/* --------------------------------------------------------------------------
+   7. Abas
+   -------------------------------------------------------------------------- */
+$A .editor-group-container > .title,
+$A .editor-group-container > .title .tabs-container {
+  background-color: var(--aero-glass-tabs) !important;
+}
+$A .tabs-container > .tab {
+  background-color: transparent !important;
+  border-radius: 8px 8px 0 0;
+}
+$A .tabs-container > .tab:hover {
+  background-color: rgba(255, 255, 255, .10) !important;
+}
+$A .tabs-container > .tab.active {
+  background: var(--aero-tab-active) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .7), inset 1px 0 0 var(--aero-edge), inset -1px 0 0 var(--aero-edge);
+  text-shadow: var(--aero-text-shadow);
+}
+
+/* --------------------------------------------------------------------------
+   8. Barra de status: gloss por cima da cor do tema (preserva os estados de
+      depuração/sem pasta, que trocam a cor)
+   -------------------------------------------------------------------------- */
+$A .part.statusbar {
+  background-image: var(--aero-gloss) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45);
+  text-shadow: 0 1px 1px rgba(0, 30, 60, .55);
+}
+$A .part.statusbar .statusbar-item.has-background-color {
+  background-image: var(--aero-gloss-soft);
+}
+
+/* --------------------------------------------------------------------------
+   9. Editor: minimap, sticky scroll e peek
+   -------------------------------------------------------------------------- */
+$A .monaco-editor .minimap canvas {
+  opacity: .62;
+}
+$A .monaco-editor .sticky-widget {
+  background-color: var(--aero-glass-widget) !important;
+  backdrop-filter: blur(var(--aero-blur-widget));
+  box-shadow: 0 4px 10px rgba(0, 22, 40, .25);
+}
+$A .monaco-editor .sticky-widget .sticky-widget-lines-scrollable,
+$A .monaco-editor .sticky-widget .sticky-widget-line-numbers,
+$A .monaco-editor .sticky-widget .sticky-line-content,
+$A .monaco-editor .sticky-widget .sticky-line-number {
+  background-color: transparent !important;
+}
+$A .monaco-editor .peekview-widget {
+  background-color: var(--aero-glass-widget) !important;
+  backdrop-filter: blur(var(--aero-blur-widget));
+}
+
+/* --------------------------------------------------------------------------
+   10. Widgets flutuantes de vidro
+   -------------------------------------------------------------------------- */
+$A .monaco-editor .suggest-widget,
+$A .monaco-editor .suggest-details,
+$A .monaco-hover,
+$A .monaco-editor .find-widget,
+$A .monaco-editor .parameter-hints-widget,
+$A .monaco-editor .rename-box,
+$A .quick-input-widget,
+$A .notifications-toasts .notification-toast,
+$A .notifications-center,
+$A .debug-toolbar {
+  background-color: var(--aero-glass-widget) !important;
+  backdrop-filter: blur(var(--aero-blur-widget)) saturate(150%);
+  border: 1px solid var(--aero-edge-strong) !important;
+  border-radius: var(--aero-radius) !important;
+  box-shadow: var(--aero-shadow), inset 0 1px 0 var(--aero-edge) !important;
+}
+$A .monaco-hover .hover-row,
+$A .monaco-hover .hover-contents,
+$A .notifications-center .notifications-center-header,
+$A .quick-input-widget .quick-input-header,
+$A .quick-input-widget .quick-input-list {
+  background-color: transparent !important;
+}
+$A .quick-input-widget .quick-input-titlebar {
+  background-image: var(--aero-gloss-soft);
+  border-radius: var(--aero-radius) var(--aero-radius) 0 0;
+}
+
+/* --------------------------------------------------------------------------
+   11. Listas, botões, inputs e scrollbars
+   -------------------------------------------------------------------------- */
+$A .monaco-list .monaco-list-row.selected,
+$A .monaco-list .monaco-list-row.focused,
+$A .monaco-list .monaco-list-row:hover {
+  border-radius: 6px;
+}
+$A .monaco-list .monaco-list-row.selected {
+  background-image: var(--aero-gloss-soft);
+}
+
+$A .monaco-button.monaco-text-button,
+$A .monaco-button-dropdown > .monaco-button {
+  background-image: var(--aero-gloss);
+  border-radius: 999px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .55), 0 1px 3px rgba(0, 40, 70, .35);
+  text-shadow: 0 1px 1px rgba(0, 30, 60, .5);
+}
+$A .monaco-button-dropdown > .monaco-button:first-child { border-radius: 999px 0 0 999px !important; }
+$A .monaco-button-dropdown > .monaco-button:last-child { border-radius: 0 999px 999px 0 !important; }
+$A .monaco-button.monaco-text-button:hover {
+  filter: brightness(1.08);
+}
+
+$A .monaco-inputbox,
+$A .monaco-select-box,
+$A .monaco-findInput .monaco-inputbox {
+  border-radius: 6px !important;
+  box-shadow: inset 0 1px 3px rgba(0, 30, 60, .25);
+}
+
+$A .monaco-scrollable-element > .scrollbar > .slider {
+  box-sizing: border-box;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  border-radius: 999px;
+  background-image: linear-gradient(90deg, rgba(255, 255, 255, .35), rgba(255, 255, 255, .05));
+}
+
+/* --------------------------------------------------------------------------
+   12. Badges como bolhas
+   -------------------------------------------------------------------------- */
+$A .monaco-count-badge,
+$A .part.activitybar .badge .badge-content {
+  background-image: var(--aero-gloss);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .6), 0 1px 2px rgba(0, 30, 50, .4);
+}

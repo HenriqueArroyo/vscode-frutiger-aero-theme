@@ -1,0 +1,36 @@
+{
+  "name": "frutiger-aero-glass",
+  "displayName": "Frutiger Aero Glass",
+  "description": "Tema Frutiger Aero (escuro e claro) com camada opcional de vidro translúcido, brilho e céu de fundo.",
+  "version": "0.1.0",
+  "publisher": "local",
+  "private": true,
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "keywords": [
+    "frutiger aero",
+    "aero",
+    "glass",
+    "aqua",
+    "theme"
+  ],
+  "contributes": {
+    "themes": [
+      {
+        "label": "Frutiger Aero Glass Dark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/aeroglass-dark-color-theme.json"
+      },
+      {
+        "label": "Frutiger Aero Glass Light",
+        "uiTheme": "vs",
+        "path": "./themes/aeroglass-light-color-theme.json"
+      }
+    ]
+  }
+}

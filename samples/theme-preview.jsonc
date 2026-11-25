@@ -1,0 +1,9 @@
+{
+  // Configuração de exemplo
+  "name": "aero-showcase",
+  "version": "0.1.0",
+  "glossy": true,
+  "opacity": 0.74,
+  "palette": ["#3FC1E8", "#7DD957", "#FFD27A"],
+  "owner": null
+}
